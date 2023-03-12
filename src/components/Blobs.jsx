@@ -9,8 +9,8 @@ function Blob({ className = "", ...props }) {
 
 export function Blobs() {
   return (
-    <div className="absolute">
-      <Blob className="bg-purple-600 -top-32 -left-32" />
+    <div className="absolute top-0 w-full">
+      <Blob className="bg-purple-600 -top-32 -right-32" />
       <Blob className="bg-blue-600 -top-32 -left-32" />
     </div>
   );

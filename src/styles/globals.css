@@ -4,4 +4,9 @@
 
 body {
   color: white;
+  overflow-x: hidden;
+}
+
+.btn {
+  @apply text-black my-8 text-center flex max-w-fit bg-white border border-white py-2 px-4 rounded-sm cursor-pointer hover:bg-gray-200;
 }
