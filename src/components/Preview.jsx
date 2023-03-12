@@ -2,6 +2,28 @@ import { useConversationsStore } from "@/stores/conversations";
 import { Sandpack } from "@codesandbox/sandpack-react";
 import { amethyst } from "@codesandbox/sandpack-themes";
 
+const defaultComponent = {
+  vanilla: `<div style="display: flex; justify-content: center; margin-top: 1rem">
+   There is no request yet.
+   </div>`,
+  react: `export default function Component () {
+  return (
+    <div style={{display:"flex", "justifyContent":"center", "marginTop": "1rem"}}>
+    There is no request yet.
+    </div>
+  )
+}`,
+  vue: `<template>
+  <div style="display:flex; justify-content: center; margin-top: 1rem;">
+      There is no request yet.
+  </div>
+</template>
+<script setup></script>`,
+  svelte: `<div style="display:flex; justify-content: center; margin-top: 1rem">
+There is no request yet.
+</div>`,
+};
+
 function generatePlaygroundFiles({ code, framework }) {
   code ??= "";
   code = code.replace(/`/g, "\\`");
@@ -9,7 +31,9 @@ function generatePlaygroundFiles({ code, framework }) {
   if (framework === "vanilla") {
     return {
       "/index.js": {
-        code: `document.getElementById("app").innerHTML = \`${code?.trim()}\``,
+        code: `document.getElementById("app").innerHTML = \`${
+          code ? code.trim() : defaultComponent.vanilla
+        }\``,
       },
     };
   }
@@ -29,7 +53,7 @@ export default function App () {
 `,
       },
       "/Component.jsx": {
-        code: `${code.trim()}`,
+        code: `${code ? code.trim() : defaultComponent.react}`,
       },
     };
   }
@@ -37,7 +61,7 @@ export default function App () {
   if (framework === "vue") {
     return {
       "/src/Component.vue": {
-        code: `${code.trim()}`,
+        code: `${code ? code.trim() : defaultComponent.vue}`,
       },
       "/src/App.vue": {
         code: `<template>
@@ -53,7 +77,7 @@ export default function App () {
   if (framework === "svelte") {
     return {
       "/Component.svelte": {
-        code: `${code.trim()}`,
+        code: `${code ? code.trim() : defaultComponent.svelte}`,
       },
       "/App.svelte": {
         code: `<script>
