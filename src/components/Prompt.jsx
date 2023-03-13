@@ -1,9 +1,10 @@
 import { useConversationsStore } from "@/stores/conversations";
-import { useEffect, useRef } from "react";
-import { SendIcon } from "./Icons";
+import { useEffect, useRef, useState } from "react";
+import { MicrophoneIcon, SendIcon } from "./Icons";
 import { Loading } from "./Loading";
 
 export function Prompt() {
+  const [isMicroWorking, setIsMicroWorking] = useState(false);
   const textAreaRef = useRef();
   const generateComponent = useConversationsStore(
     (state) => state.generateComponent
@@ -12,9 +13,41 @@ export function Prompt() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    setIsMicroWorking(false);
 
     const prompt = textAreaRef.current.value.trim();
     generateComponent({ prompt });
+  }
+
+  function handleSpeechToText() {
+    setIsMicroWorking(true);
+
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert("Speech Recognition is not supported by your browser");
+      return;
+    }
+
+    textAreaRef.current.value = "";
+
+    const recognition = new SpeechRecognition();
+    recognition.interimResults = true;
+    recognition.lang = "es-ES";
+
+    recognition.addEventListener("result", (e) => {
+      const transcript = Array.from(e.results)
+        .map((result) => result[0])
+        .map((result) => result.transcript)
+        .join("");
+
+      textAreaRef.current.value = transcript;
+    });
+
+    recognition.addEventListener("end", handleSubmit);
+
+    recognition.start();
   }
 
   const handleKeyDown = (event) => {
@@ -57,9 +90,20 @@ export function Prompt() {
           {streaming ? (
             <Loading />
           ) : (
-            <button className="hover:scale-125 transition-all" type="submit">
-              <SendIcon />
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                className={`${
+                  isMicroWorking ? "opacity-40 pointer-events-none" : ""
+                }  transition-all hover:scale-125`}
+                type="button"
+                onClick={handleSpeechToText}
+              >
+                <MicrophoneIcon />
+              </button>
+              <button className="transition-all hover:scale-125" type="submit">
+                <SendIcon />
+              </button>
+            </div>
           )}
         </div>
       </div>
