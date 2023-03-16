@@ -1,55 +1,47 @@
-import { useConversationsStore } from "@/stores/conversations";
-import { JavaScriptIcon, ReactIcon, SvelteIcon, VueIcon } from "./Icons";
+import { useConversationsStore } from '@/stores/conversations'
+import { ReactIcon, VueIcon, SvelteIcon, JavaScriptIcon } from './Icons'
+import { Select } from './Select'
 
 const FRAMEWORKS = [
   {
-    name: "JavaScript",
+    name: 'Vanilla',
     icon: <JavaScriptIcon />,
-    value: "vanilla",
+    value: 'vanilla'
   },
   {
-    name: "React",
+    name: 'React',
     icon: <ReactIcon />,
-    value: "react",
+    value: 'react'
   },
   {
-    name: "Vue",
+    name: 'Vue',
     icon: <VueIcon />,
-    value: "vue",
+    value: 'vue'
   },
   {
-    name: "Svelte",
+    name: 'Svelte',
     icon: <SvelteIcon />,
-    value: "svelte",
-  },
-];
+    value: 'svelte'
+  }
+]
 
 export function SelectFramework() {
-  const { framework, setFramework } = useConversationsStore((state) => ({
+  const { framework, setFramework, streaming } = useConversationsStore((state) => ({
     framework: state.framework,
     setFramework: state.setFramework,
-  }));
+    streaming: state.streaming
+  }))
+
+  const selected = FRAMEWORKS.find((f) => f.value === framework)
 
   return (
-    <ul className="flex gap-x-12 items-center justify-center my-12">
-      {FRAMEWORKS.map(({ icon, value }) => (
-        <li key={value}>
-          <label>
-            <input
-              defaultChecked={framework === value}
-              onClick={() => setFramework(value)}
-              className="peer"
-              hidden
-              type="radio"
-              name="framework"
-              value={value}
-            />
-            <span className="hover:opacity-75 hover:scale-125 transition cursor-pointer opacity-40 peer-checked:opacity-100">
-              {icon}
-            </span>
-          </label>
-        </li>
-      ))}
-    </ul>
-  );
+    <Select
+      disabled={streaming}
+      list={FRAMEWORKS}
+      label='Framework:'
+      value={framework}
+      update={setFramework}
+      selected={selected}
+    />
+  )
 }

@@ -6,15 +6,30 @@ export const useConversationsStore = create((set, get) => ({
   language: "javascript", // typescript or javascript
   framework: "vanilla", // react, vue, angular, vanilla
   streaming: false,
-  setFramework: (framework) => set({ code: null, framework }),
-  setLanguage: (language) => set({ language }),
-  generateComponent: async ({ prompt }) => {
+  prompt: "",
+  setPrompt: (prompt) => {
+    set({ code: null, prompt });
+  },
+  setFramework: (framework) => {
+    const { prompt, generateComponent } = get();
+    set({ code: null, framework });
+    prompt && generateComponent({ prompt, framework });
+  },
+  setLanguage: (language) => {
+    const { prompt, generateComponent } = get();
+    set({ code: null, language });
+    prompt && generateComponent({ prompt, language });
+  },
+  generateComponent: async ({
+    prompt,
+    language: overwriteLanguage,
+    framework: overwriteFramework,
+  }) => {
     set({ streaming: true });
 
-    const { language, framework } = get(({ language, framework }) => ({
-      language,
-      framework,
-    }));
+    const { language: stateLanguage, framework: stateFramework } = get();
+    const language = overwriteLanguage ?? stateLanguage;
+    const framework = overwriteFramework ?? stateFramework;
 
     const url = `${APIS.GENERATE}?prompt=${prompt}&language=${language}&framework=${framework}`;
 

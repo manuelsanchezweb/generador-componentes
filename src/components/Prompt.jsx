@@ -82,9 +82,9 @@ export function Prompt() {
           name="prompt"
           type="text"
           placeholder=""
-          className={`resize-none ${
+          className={`resize-none pr-20 sm:max-w-full ${
             streaming ? "opacity-40 pointer-events-none" : ""
-          } block w-full text-md px-4 py-2 border border-gray-800 rounded-md bg-zinc-900/20 backdrop-blur-3xl sm:text-md shadow-lg min-h-[48px] text-white outline-none`}
+          } block w-full text-md px-4 py-2 border border-gray-800 rounded-md bg-zinc-900/20 backdrop-blur-3xl sm:text-md shadow-lg min-h-[96px] ms:min-h-[48px] text-white outline-none`}
         />
         <div className="absolute right-4 top-0 h-full flex justify-center items-center">
           {streaming ? (

@@ -69,8 +69,15 @@ export default async function handler(req, res) {
     },
   ];
 
-  // TODO: Future possibility: add more options to the propmt
-  const promptToSend = `${prompt}. Con ${framework} y ${language}.`;
+  let promptToSend = prompt;
+
+  if (framework !== "vanilla") {
+    promptToSend = `${prompt}. Para ${framework}.`;
+  }
+
+  if (language !== "javascript") {
+    promptToSend = `${prompt}. Con ${language}.`;
+  }
 
   const response = await fetch(API_URL, {
     method: "POST",

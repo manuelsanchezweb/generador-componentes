@@ -3,6 +3,7 @@ import { Debug } from "@/components/Debug";
 import Preview from "@/components/Preview";
 import { Prompt } from "@/components/Prompt";
 import { SelectFramework } from "@/components/SelectFramework";
+import { SelectLanguage } from "@/components/SelectLanguage";
 import { useConversationsStore } from "@/stores/conversations";
 import Head from "next/head";
 
@@ -11,7 +12,7 @@ import Head from "next/head";
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-  const response = useConversationsStore((state) => state.response);
+  const code = useConversationsStore((state) => state.code);
 
   return (
     <>
@@ -32,21 +33,47 @@ export default function Home() {
             Component Generator with AI
           </h1>
 
-          <SelectFramework />
-
-          <div className="flex items-center h-full w-full">
-            <div className="w-full">
-              <Prompt />
+          <div className="w-full mx-auto animate-delay-500 animate-duration-1000 animate-fadeIn">
+            <Prompt />
+            <div className="flex flex-col gap-4 md:flex-row items-center justify-center mt-4 gap-x-16">
+              <SelectFramework />
+              <SelectLanguage />
             </div>
+
+            {code && (
+              <section className="mb-20 animate-fadeIn">
+                <h3 className="pt-20 pb-10 text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-purple-400">
+                  Result
+                </h3>
+                <Preview />
+              </section>
+            )}
           </div>
-
-          <div className="text-white">{response}</div>
-
-          <Preview />
         </div>
 
         <Debug />
       </main>
+
+      <footer
+        className={`fixed bottom-0 left-0 right-0 block pb-20 mt-10 text-center animate-delay-1000 opacity-60 text-white/80 ${
+          code ? "animate-fadeOut" : "animate-delay-500 animate-fadeIn"
+        }`}
+      >
+        Done thanks to{" "}
+        <a
+          className="text-white hover:underline"
+          href="https://twitter.com/midudev"
+        >
+          @midudev
+        </a>{" "}
+        &bull;{" "}
+        <a
+          className="text-white hover:underline"
+          href="https://twitch.tv/midudev"
+        >
+          on Twitch
+        </a>
+      </footer>
     </>
   );
 }
